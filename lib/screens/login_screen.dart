@@ -15,6 +15,7 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    print(watch(_authProvider).isLoading);
     return Scaffold(
         appBar: AppBar(
           title: const Text('Google Sign In'),

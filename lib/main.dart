@@ -32,7 +32,14 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(primarySwatch: Colors.red),
         home: auth.isAuth
             ? HomeScreen()
-            : LoginScreen()
-      );});
+            : FutureBuilder(
+                future: auth.tryAutoLogin(),
+                builder: (ctx, authResultSnapshot) =>
+                authResultSnapshot.connectionState ==
+                  ConnectionState.waiting
+                    ? Center(
+                  child: CircularProgressIndicator(),
+                ) : LoginScreen()
+      ));});
   }
 }

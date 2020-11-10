@@ -84,7 +84,14 @@ class Auth extends ChangeNotifier {
     }
     final extractedData = json.decode(
         prefs.getString('userData')) as Map<String, Object>;
-    final credential = extractedData['credential'];
+
+    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: extractedData['accessToken'],
+      idToken: extractedData['idToken'],
+    );
+
+    _token = credential.idToken;
+    final UserCredential authResult = await auth.signInWithCredential(credential);
 
     notifyListeners();
     return true;
@@ -95,6 +102,8 @@ class Auth extends ChangeNotifier {
     notifyListeners();
     await auth.signOut();
     await _googleSignIn.signOut();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
     _loading = false;
     notifyListeners();
     return true;
